@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Intelligence Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f4f7f6; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        /* Header Styling */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .logout-btn { color: #e74c3c; text-decoration: none; font-weight: bold; }
+
+        /* Analysis Section */
+        textarea { width: 100%; height: 100px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; }
+        button { background-color: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #27ae60; }
+
+        /* Results Box */
+        .results { background: #e8f6ef; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 5px solid #2ecc71; }
+
+        /* --- CHATBOT STYLING --- */
+        .chat-container { margin-top: 40px; border-top: 2px solid #eee; padding-top: 20px; }
+        #chat-window { height: 250px; overflow-y: auto; border: 1px solid #ddd; padding: 15px; background: #fafafa; border-radius: 8px; display: flex; flex-direction: column; }
+        .message { margin: 5px 0; padding: 8px 12px; border-radius: 15px; max-width: 80%; }
+        .user-msg { background: #3498db; color: white; align-self: flex-end; }
+        .bot-msg { background: #ecf0f1; color: #2c3e50; align-self: flex-start; }
+        .chat-input-area { display: flex; margin-top: 10px; gap: 10px; }
+        #user-chat-input { flex-grow: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Hello, {{ user }}!</h2>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+    <!-- Email Analysis Form -->
+    <section>
+        <h3>Analyze New Email</h3>
+        <form action="/analyse" method="post">
+            <textarea name="email" placeholder="Paste the email content here..." required></textarea>
+            <button type="submit">Analyze Email</button>
+        </form>
+    </section>
+
+    <!-- Analysis Results (Only shows if 'result' exists) -->
+    {% if result %}
+    <div class="results">
+        <h4>Analysis Result:</h4>
+        <p><b>Category:</b> {{ result.category }}</p>
+        <p><b>Priority:</b> {{ result.priority }}</p>
+        <p><b>AI Summary:</b> {{ result.summary }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Chatbot Section -->
+    <div class="chat-container">
+        <h3>AI Assistant</h3>
+        <div id="chat-window">
+            <div class="message bot-msg">How can I help you with your emails today?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="user-chat-input" placeholder="Ask me anything...">
+            <button onclick="sendChatMessage()" style="margin-top: 0; background-color: #3498db;">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function sendChatMessage() {
+        const input = document.getElementById('user-chat-input');
+        const chatWindow = document.getElementById('chat-window');
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        // 1. Add User Message to UI
+        chatWindow.innerHTML += `<div class="message user-msg">${message}</div>`;
+        input.value = '';
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        // 2. Send to FastAPI (/chat_api)
+        const formData = new FormData();
+        formData.append('user_input', message);
+
+        try {
+            const response = await fetch('/chat_api', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            // 3. Add AI Response to UI
+            chatWindow.innerHTML += `<div class="message bot-msg">${data.response}</div>`;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        } catch (error) {
+            chatWindow.innerHTML += `<div class="message bot-msg" style="color: red;">Error connecting to server.</div>`;
+        }
+    }
+
+    // Allow pressing "Enter" to send
+    document.getElementById('user-chat-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendChatMessage();
+        }
+    });
+</script>
+
+</body>
+</html>

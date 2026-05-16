@@ -1,0 +1,9 @@
+#Secret Keys
+.env
+
+#Virtual Environment
+.venv/
+
+#Python Cache
+**/__pycache__/
+*.pyc
