@@ -14,7 +14,7 @@ if email_name.endswith("@gmail.com"):
     data[email_name] = secret_key
 
     with open("data.json", "w") as file:
-        file.write(json.dump(data))
+        file.write(json.dumps(data))
     
 else:
     print("invalid email.Please write proper email")

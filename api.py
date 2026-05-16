@@ -23,6 +23,12 @@ def signup(request : Request):
 
 @app.post("/signuppage", response_class= HTMLResponse)
 def sign(request : Request, email_name : str = Form(...), secret_key : str = Form(...)):
+    if not email_name.endswith("@gmail.com"):
+        return templates.TemplateResponse(
+            request= request,
+            name = "signup.html",
+            context = {"Error" : "invalid email.Please write proper email"}
+        )
     try:
         with open("data.json" , "r") as file:
             data = json.load(file)
