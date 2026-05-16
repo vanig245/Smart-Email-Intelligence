@@ -1,5 +1,6 @@
 import json
 import requests
+import sys
 # signin
 email_name = input("enter your email: ")
 if email_name.endswith("@gmail.com"):
@@ -13,11 +14,11 @@ if email_name.endswith("@gmail.com"):
     data[email_name] = secret_key
 
     with open("data.json", "w") as file:
-        file.write(json.dumps(data))
+        file.write(json.dump(data))
     
 else:
     print("invalid email.Please write proper email")
-
+    sys.exit()
 
 login_email = input("enter your login_email: ")
 
