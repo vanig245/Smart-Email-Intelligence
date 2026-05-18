@@ -40,7 +40,7 @@ To get a local copy of this backend playground up and running on your machine, e
 
 ```bash
 # Clone the repository from GitHub
-git clone [https://github.com/](https://github.com/)<vanig245>/<Smart-Email-Intelligence>.git
+git clone https://github.com/vanig245/Smart-Email-Intelligence.git
 ```
 
 ## Installation & Deployment Guide
