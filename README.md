@@ -18,19 +18,6 @@ A backend-focused FastAPI playground designed to practice user authentication, s
 
 ---
 
-<!-- ## Core Backend Logic Implemented
-
-### 1. Strict Request Validation
-*   The backend contains a localized server-side interceptor checking if incoming subscription attempts explicitly validate against standard `@gmail.com` syntax structures. It forcefully stops invalid or maliciously formed inputs before writing down parameters to the local storage unit.
-
-### 2. State-Based Route Security
-*   Dashboard access, mail processing, and backend chat relays check for client cookies. If a malicious or anonymous request is flagged, the application forcefully terminates the execution path and re-routes the traffic back to the primary authentication page via `303 See Other` redirects.
-
-### 3. Asynchronous Non-Blocking Chat Relays
-*   Instead of expensive full-page reloads that re-trigger external compute operations, the backend uses an isolated async API pipeline (`/chat_api`). It catches client payloads, targets the massive 70B parameter Llama cluster via secure multi-threaded calls, and returns clean serialization dictionaries for instantaneous UI feedback. -->
-
----
-
 ## Project Tree Structure
 
 ```text
@@ -43,6 +30,8 @@ A backend-focused FastAPI playground designed to practice user authentication, s
     ├── login.html         # Login security frame
     └── signup.html        # Onboarding framework with strict input parsing
 
+```
+
 ---
 
 ## Cloning the Repository
@@ -52,6 +41,7 @@ To get a local copy of this backend playground up and running on your machine, e
 ```bash
 # Clone the repository from GitHub
 git clone [https://github.com/](https://github.com/)<vanig245>/<Smart-Email-Intelligence>.git
+```
 
 ## Installation & Deployment Guide
 
